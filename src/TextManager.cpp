@@ -296,5 +296,3 @@ struct lang_init{
 	}
 };
 static lang_init init;
-
-
