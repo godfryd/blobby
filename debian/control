@@ -1,0 +1,49 @@
+Source: blobby
+Section: games
+Priority: optional
+Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
+Uploaders: Felix Geyer <fgeyer@debian.org>
+Build-Depends: debhelper (>= 9),
+               cmake,
+               imagemagick,
+               zip,
+               libboost-dev,
+               libgl1-mesa-dev | libgl-dev,
+               liblua5.2-dev,
+               libphysfs-dev,
+               libsdl2-dev,
+               libtinyxml-dev,
+               zlib1g-dev
+Homepage: http://sourceforge.net/projects/blobby/
+Standards-Version: 3.9.6
+Vcs-Git: git://anonscm.debian.org/pkg-games/blobby.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-games/blobby.git
+
+Package: blobby
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         blobby-data (>= ${source:Version})
+Description: Volleyball game with blobs
+ This package contains the client binary for Blobby Volley 2.
+ .
+ Blobby Volley is an arcade volleyball game with jumping blobs.
+ It contains a multiplayer mode and several bots.
+
+Package: blobby-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         blobby-data (>= ${source:Version})
+Description: Volleyball game with blobs (server)
+ This package contains the server binary for Blobby Volley 2.
+ .
+ Blobby Volley is an arcade volleyball game with jumping blobs.
+ It contains a multiplayer mode and several bots.
+
+Package: blobby-data
+Architecture: all
+Depends: ${misc:Depends}
+Description: Volleyball game with blobs (data files)
+ This package contains the static data for Blobby Volley 2.
+ .
+ Blobby Volley is an arcade volleyball game with jumping blobs.
+ It contains a multiplayer mode and several bots.

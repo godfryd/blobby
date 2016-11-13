@@ -1,0 +1,5 @@
+01_sdl_default.patch
+02_use_system_lua.patch
+04_use_system_tinyxml.patch
+07_cxxflags_append.patch
+09_reproducible_build.patch

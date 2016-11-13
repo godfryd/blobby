@@ -1,0 +1,49 @@
+Description: Append /usr/share/blobby to the server config search path
+ and write the config to the user's home dir.
+Author: Felix Geyer <fgeyer@debian.org>
+Bug: https://sourceforge.net/apps/mantisbt/blobby/view.php?id=33
+Bug-Debian: http://bugs.debian.org/648204
+
+--- a/src/server/DedicatedServer.cpp
++++ b/src/server/DedicatedServer.cpp
+@@ -36,6 +36,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ 
+ #include <SDL/SDL_timer.h>
+ 
++#include "config.h"
++
+ #include "InputSource.h"
+ #include "PhysicWorld.h"
+ #include "NetworkGame.h"
+@@ -131,6 +133,8 @@ int main(int argc, char** argv)
+ 	try
+ 	{
+ 		config.loadFile("server.xml");
++		// make sure the config is present in the user dir
++		config.saveFile("server.xml");
+ 		port = config.getInteger("port");
+ 		maxClients = config.getInteger("maximum_clients");
+ 
+@@ -523,7 +527,22 @@ void wait_and_restart_child()
+ void setup_physfs(char* argv0)
+ {
+ 	FileSystem& fs = FileSystem::getSingleton();
++#ifdef WIN32
+ 	fs.addToSearchPath("data");
++	fs.setWriteDir("data");
++#else
++	fs.addToSearchPath(BLOBBY_INSTALL_PREFIX  "/share/blobby");
++
++	std::string userdir = fs.getUserDir();
++	std::string userAppend = ".blobby";
++	std::string homedir = userdir + userAppend;
++	/// \todo please review this code and determine if we really need to add userdir to serach path
++	/// only to remove it later
++	fs.setWriteDir(userdir);
++	fs.probeDir(userAppend);
++	fs.removeFromSearchPath(userdir);
++	fs.setWriteDir(homedir);
++#endif
+ }
+ 
+ 

@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+%:
+	dh $@ --parallel
+
+override_dh_install:
+	dh_install --fail-missing
+ifneq (,$(filter blobby, $(shell dh_listpackages)))
+	convert -transparent black data/gfx/ball01.bmp \
+	  +set date:create +set date:modify -define png:exclude-chunk=time \
+	  debian/blobby/usr/share/icons/hicolor/64x64/apps/blobby.png
+	convert -transparent black data/gfx/ball01.bmp -resize 32x32 \
+	  +set date:create +set date:modify -define png:exclude-chunk=time \
+	  debian/blobby/usr/share/icons/hicolor/32x32/apps/blobby.png
+endif
+
+override_dh_installchangelogs:
+	dh_installchangelogs ChangeLog

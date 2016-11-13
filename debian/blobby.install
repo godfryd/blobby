@@ -1,0 +1,4 @@
+debian/blobby.desktop usr/share/applications
+usr/bin/blobby usr/games
+usr/share/blobby/config.xml
+usr/share/blobby/inputconfig.xml

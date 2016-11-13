@@ -1,0 +1,132 @@
+blobby (1.0-3) unstable; urgency=medium
+
+  * Drop Debian menu entry.
+  * Fix FTBFS: include ostream in NetworkMessage.cpp
+    - Add 10_ostream_include.patch
+
+ -- Felix Geyer <fgeyer@debian.org>  Wed, 09 Sep 2015 17:03:53 +0200
+
+blobby (1.0-2) unstable; urgency=medium
+
+  * Make builds reproducible.
+    - d/patches/09_reproducible_build.patch: Don't store the atime of files
+      in zip archives.
+    - d/rules: Don't store mtime in png files.
+  * Remove obsolete/duplicate sections from the copyright file.
+  * Bump Standards-Version to 3.9.6, no changes needed.
+  * Fix FTBFS when building only arch-all packages.
+
+ -- Felix Geyer <fgeyer@debian.org>  Fri, 01 May 2015 10:13:13 +0200
+
+blobby (1.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+  [ Jackson Doak ]
+  * Disable 05_server_config_file.patch, no longer needed
+  * Drop 06_fix_ftbfs_assert_include.patch, no longer needed
+  * Add build depend on libsdl2-dev
+
+  [ Felix Geyer ]
+  * Upstream uses lua 5.2 now. Adapt build-depends and 02_use_system_lua.patch
+    accordingly.
+  * Make sure $CXXFLAGS are not overwritten by the upstream CMakeLists.txt.
+    - Add 07_cxxflags_append.patch
+  * Drop libsdl1.2-dev build-dependency, not needed anymore.
+  * Cherry-pick upstream commit to fix config file loading.
+    - Add 08_config_loading.patch
+  * Bump Standards-Version to 3.9.5, no changes needed.
+
+ -- Felix Geyer <fgeyer@debian.org>  Wed, 23 Apr 2014 23:36:09 +0200
+
+blobby (1.0~rc3-3) unstable; urgency=low
+
+  * Fix FTBFS: 'assert' was not declared in this scope. (Closes: #710632)
+    - Add 06_fix_ftbfs_assert_include.patch
+
+ -- Felix Geyer <fgeyer@debian.org>  Sat, 01 Jun 2013 15:18:00 +0200
+
+blobby (1.0~rc3-2) unstable; urgency=low
+
+  * Upload to unstable.
+  * Bump Standards-Version to 3.9.4, no changes needed.
+
+ -- Felix Geyer <fgeyer@debian.org>  Wed, 08 May 2013 21:49:41 +0200
+
+blobby (1.0~rc3-1) experimental; urgency=low
+
+  * Upload to experimental due to the freeze.
+  * New upstream release.
+  * Refresh patches.
+  * Drop 06_ftbfs_gcc47.patch, merged upstream.
+  * Switch to my @debian.org email address.
+
+ -- Felix Geyer <fgeyer@debian.org>  Sun, 04 Nov 2012 12:05:41 +0100
+
+blobby (1.0~rc1-2) unstable; urgency=low
+
+  * Fix FTBFS with gcc 4.7.
+    - Add 06_ftbfs_gcc47.patch
+  * Switch to debhelper compat level v9.
+
+ -- Felix Geyer <debfx-pkg@fobos.de>  Tue, 01 May 2012 12:27:19 +0200
+
+blobby (1.0~rc1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Refresh patches.
+  * Fix Vcs-Browser url.
+  * Install the upstream changelog.
+  * Bump Standards-Version to 3.9.3, no changes needed.
+  * Update copyright file.
+
+ -- Felix Geyer <debfx-pkg@fobos.de>  Fri, 13 Apr 2012 16:14:15 +0200
+
+blobby (0.9c-1) unstable; urgency=low
+
+  * New upstream release. (LP: #887143)
+    - Resolves all licensing issues, no need to repackage the upstream
+      tarball anymore.
+  * Drop 03_detect_endianness_glibc.patch, merged upstream.
+  * Refresh patches.
+  * Enable parallel building.
+  * Switch to source format 3.0 (quilt).
+    - Add unapply-patches and abort-on-upstream-changes to local-options.
+    - Refresh patches.
+  * Export build flags using /usr/share/dpkg/buildflags.mk.
+  * Improve package description, thanks to Paul Stewart. (LP: #833458)
+  * Bump Standards-Version to 3.9.2, no changes needed.
+  * Move package to the pkg-games team.
+  * Generate blobby icons during the build.
+  * Update copyright file to latest DEP-5 spec.
+  * Pass --fail-missing to dh_install.
+  * Add 05_server_config_file.patch: append /usr/share/blobby to the server
+    config search path and write the config to the user's home dir.
+    (Closes: #648204)
+
+ -- Felix Geyer <debfx-pkg@fobos.de>  Sun, 04 Dec 2011 12:45:10 +0100
+
+blobby (0.8-dfsg-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Set DM-Upload-Allowed.
+
+ -- Philipp Kern <pkern@debian.org>  Mon, 28 Nov 2011 22:39:54 +0100
+
+blobby (0.8-dfsg-2) unstable; urgency=low
+
+  * Add 03_detect_endianness_glibc.patch to fix FTBFS on s390 and sh4.
+    (Closes: #572025)
+  * Add Vcs-Git and Vcs-Browser fields.
+  * Update copyright information of the tinyxml source.
+  * Explicitly set source format to "1.0".
+  * Add -Wl,--as-needed to LDFLAGS.
+  * Use the tinyxml package instead of building a local copy.
+
+ -- Felix Geyer <debfx-pkg@fobos.de>  Sat, 17 Apr 2010 00:54:09 +0200
+
+blobby (0.8-dfsg-1) unstable; urgency=low
+
+  * Initial release. (Closes: #408439)
+
+ -- Felix Geyer <debfx-pkg@fobos.de>  Tue, 23 Feb 2010 18:28:39 +0100

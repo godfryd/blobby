@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Blobby Volley 2
+GenericName=Volleyball Game
+Icon=blobby
+Exec=blobby
+Terminal=false
+Categories=Game;ArcadeGame;

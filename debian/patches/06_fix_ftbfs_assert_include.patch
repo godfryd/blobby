@@ -1,0 +1,16 @@
+Description: Add missing #include <assert.h> statement to fix FTBFS.
+Bug: https://sourceforge.net/apps/mantisbt/blobby/view.php?id=103
+Bug-Debian: http://bugs.debian.org/710632
+Author: Felix Geyer <fgeyer@debian.org>
+
+--- a/src/CrossCorrelation.h
++++ b/src/CrossCorrelation.h
+@@ -19,6 +19,8 @@
+ 
+ #pragma once
+ 
++#include <assert.h>
++
+ #include <cassert>
+ #include <iterator>
+ 
