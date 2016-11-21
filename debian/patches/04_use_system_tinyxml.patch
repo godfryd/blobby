@@ -4,7 +4,7 @@ Author: Felix Geyer <fgeyer@debian.org>
 ---
  src/CMakeLists.txt               |    1 -
  src/FileRead.cpp                 |    2 +-
- src/replays/ReplayRecorder.cpp           |    2 +-
+ src/replays/ReplayRecorder.cpp   |    2 +-
  src/TextManager.cpp              |    2 +-
  src/UserConfig.cpp               |    2 +-
  src/state/NetworkSearchState.cpp |    2 +-
@@ -22,53 +22,53 @@ Author: Felix Geyer <fgeyer@debian.org>
 @@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite
  #include <boost/scoped_array.hpp>
  #include <boost/algorithm/string.hpp>
-
+ 
 -#include "tinyxml/tinyxml.h"
 +#include <tinyxml.h>
-
+ 
  extern "C"
  {
 --- a/src/replays/ReplayRecorder.cpp
 +++ b/src/replays/ReplayRecorder.cpp
 @@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite
-
- #include <boost/crc.hpp>
-
+ 
+ #include <boost/algorithm/string/trim_all.hpp>
+ 
 -#include "tinyxml/tinyxml.h"
 +#include <tinyxml.h>
-
+ 
  #include "raknet/BitStream.h"
-
+ 
 --- a/src/TextManager.cpp
 +++ b/src/TextManager.cpp
 @@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite
  #include <algorithm>
  #include <set>
-
+ 
 -#include "tinyxml/tinyxml.h"
 +#include <tinyxml.h>
-
+ 
  #include "Global.h"
  #include "FileRead.h"
 --- a/src/UserConfig.cpp
 +++ b/src/UserConfig.cpp
 @@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite
-
+ 
  #include <boost/make_shared.hpp>
-
+ 
 -#include "tinyxml/tinyxml.h"
 +#include <tinyxml.h>
-
+ 
  #include "Global.h"
  #include "FileRead.h"
 --- a/src/state/NetworkSearchState.cpp
 +++ b/src/state/NetworkSearchState.cpp
-@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite
+@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place, Suite
  #include "blobnet/layer/Http.hpp"
  #include "blobnet/exception/HttpException.hpp"
-
+ 
 -#include "tinyxml/tinyxml.h"
 +#include <tinyxml.h>
-
+ 
  #include "NetworkState.h"
- #include "LobbyState.h"
+ #include "LobbyStates.h"
