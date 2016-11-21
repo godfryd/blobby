@@ -14,7 +14,7 @@ Author: Felix Geyer <fgeyer@debian.org>
  add_subdirectory(tinyxml)
  ADD_DEFINITIONS(-std=c++11)
  add_subdirectory(raknet)
-@@ -101,11 +101,11 @@ else (CMAKE_SYSTEM_NAME STREQUAL Windows)
+@@ -101,11 +100,11 @@ else (CMAKE_SYSTEM_NAME STREQUAL Windows
  endif (CMAKE_SYSTEM_NAME STREQUAL Windows)
  
  add_executable(blobby ${blobby_SRC})
