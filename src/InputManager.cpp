@@ -40,8 +40,9 @@ const unsigned int DOUBLE_CLICK_TIME = 200;
 
 InputManager::InputManager()
 {
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
 	SDL_JoystickEventState(SDL_ENABLE);
+	SDL_GameControllerEventState(SDL_ENABLE);
 	JoystickPool::getSingleton().probeJoysticks();
 	assert (mSingleton == 0);
 	mSingleton = this;
@@ -464,4 +465,3 @@ bool InputManager::isMouseCaptured() const
 {
 	return mMouseCaptured;
 }
-
