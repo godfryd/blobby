@@ -76,30 +76,81 @@ PlayerInputAbs JoystickInputDevice::transferInput()
 
 bool JoystickInputDevice::getAction(const JoystickAction& action)
 {
-	if (action.joy != 0)
+	if (action.joyPad.joy)
 	{
 		switch (action.type)
 		{
 			case JoystickAction::AXIS:
 				if (action.number < 0)
 				{
-					if (SDL_JoystickGetAxis(action.joy,
+					if (SDL_JoystickGetAxis(action.joyPad.joy,
 						-action.number - 1) < -15000)
 						return true;
 				}
 				else if (action.number > 0)
 				{
-					if (SDL_JoystickGetAxis(action.joy,
+					if (SDL_JoystickGetAxis(action.joyPad.joy,
 						action.number - 1) > 15000)
 						return true;
 				}
 				break;
 
 			case JoystickAction::BUTTON:
-				if (SDL_JoystickGetButton(action.joy,
+				if (SDL_JoystickGetButton(action.joyPad.joy,
 							action.number))
 					return true;
 				break;
+		}
+	}
+	else if (action.joyPad.pad)
+	{
+		if (action.number == 0)  // left
+		{
+			if (SDL_GameControllerGetButton(action.joyPad.pad, SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_LEFTX) < -10000)
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_RIGHTX) < -10000)
+			{
+				return true;
+			}
+		}
+		else if (action.number == 1)  // right
+		{
+			if (SDL_GameControllerGetButton(action.joyPad.pad, SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_LEFTX) > 10000)
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_RIGHTX) > 10000)
+			{
+				return true;
+			}
+		}
+		else  // jump
+		{
+			if (SDL_GameControllerGetButton(action.joyPad.pad, SDL_CONTROLLER_BUTTON_DPAD_UP))
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetButton(action.joyPad.pad, SDL_CONTROLLER_BUTTON_A)) {
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_LEFTY) < -10000)
+			{
+				return true;
+			}
+			if (SDL_GameControllerGetAxis(action.joyPad.pad, SDL_CONTROLLER_AXIS_RIGHTY) < -10000)
+			{
+				return true;
+			}
 		}
 	}
 	return false;

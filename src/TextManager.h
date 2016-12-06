@@ -128,6 +128,7 @@ class TextManager
 			OP_KEYBOARD,
 			OP_MOUSE,
 			OP_JOYSTICK,
+			OP_GAMEPAD,
 			OP_JUMP_BUTTON,
 			OP_SET_ALL,
 			OP_LEFT_KEY,

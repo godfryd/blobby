@@ -27,12 +27,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "BlobbyDebug.h"
 #include "InputManager.h"
 
+struct JoyPad {
+  SDL_Joystick* joy;
+  SDL_GameController* pad;
+};
+
 class JoystickPool : public ObjectCounter<JoystickPool>
 {
 	public:
 		static JoystickPool& getSingleton();
 
-		SDL_Joystick* getJoystick(int id);
+		JoyPad getJoystick(int id);
 
 		void openJoystick(const int joyId);
 		void closeJoystick(const int joyId);
@@ -40,7 +45,7 @@ class JoystickPool : public ObjectCounter<JoystickPool>
 		void closeJoysticks();
 
 	private:
-		typedef std::map<int, SDL_Joystick*> JoyMap;
+		typedef std::map<int, JoyPad> JoyMap;
 		JoyMap mJoyMap;
 		static JoystickPool* mSingleton;
 };
@@ -59,7 +64,7 @@ struct JoystickAction : public ObjectCounter<JoystickAction>
 
 	JoystickAction(std::string string);
 	JoystickAction(int _joyid, Type _type, int _number)
-		: type(_type), joy(0), joyid(_joyid),
+	  : type(_type), joyPad({NULL, NULL}), joyid(_joyid),
 			number(_number) {}
 	~JoystickAction();
 	JoystickAction(const JoystickAction& action);
@@ -69,7 +74,7 @@ struct JoystickAction : public ObjectCounter<JoystickAction>
 
 	Type type;
 
-	SDL_Joystick* joy;
+	JoyPad joyPad;
 	int joyid;
 
 	// Note: Axis are stored as the SDL axis +1, so we can used

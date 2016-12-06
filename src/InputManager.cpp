@@ -27,6 +27,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <SDL2/SDL.h>
 
+#if __DESKTOP__
+	#ifndef WIN32
+		#include "config.h"
+	#endif
+#endif
+
 #include "UserConfig.h"
 #include "RenderManager.h"
 #include "InputDevice.h"
@@ -41,6 +47,11 @@ const unsigned int DOUBLE_CLICK_TIME = 200;
 InputManager::InputManager()
 {
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
+	const char* gcdb = SDL_getenv("BLOBBY_GAMECONTROLLERDB_FILE");
+	if (gcdb == NULL) {
+		gcdb = BLOBBY_INSTALL_PREFIX  "/share/blobby/gamecontrollerdb.txt";
+	}
+	SDL_GameControllerAddMappingsFromFile(gcdb);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_GameControllerEventState(SDL_ENABLE);
 	JoystickPool::getSingleton().probeJoysticks();
@@ -102,6 +113,23 @@ InputDevice* InputManager::beginGame(PlayerSide side) const
 		JoystickAction laction(config.getString(prefix + "joystick_left"));
 		JoystickAction raction(config.getString(prefix + "joystick_right"));
 		JoystickAction jaction(config.getString(prefix + "joystick_jump"));
+		return createJoystrickInput(laction, raction, jaction);
+	}
+	// load config for gamepad
+	else if (device == "gamepad")
+	{
+		std::string pad;
+		if (side == LEFT_PLAYER)
+		{
+			pad = "gamepad_0_";
+		}
+		else
+		{
+			pad = "gamepad_1_";
+		}
+		JoystickAction laction(pad + "left");
+		JoystickAction raction(pad + "right");
+		JoystickAction jaction(pad + "jump");
 		return createJoystrickInput(laction, raction, jaction);
 	}
 	// load config for touch
@@ -253,9 +281,79 @@ void InputManager::updateInput()
 				mUnclick = true;
 				break;
 
+			case SDL_CONTROLLERAXISMOTION:
+				if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY || event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+				{
+					if (event.caxis.value > 1000)
+					{
+						mDown = true;
+					}
+					else if (event.caxis.value < -1000)
+					{
+						mUp = true;
+					}
+				}
+				else if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY || event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+				{
+					if (event.caxis.value > 1000)
+					{
+						mRight = true;
+					}
+					else if (event.caxis.value < -1000)
+					{
+						mLeft = true;
+					}
+				}
+				break;
+			case SDL_CONTROLLERBUTTONDOWN:
+				switch (event.cbutton.button)
+				{
+					case SDL_CONTROLLER_BUTTON_DPAD_UP:
+						mUp = true;
+						break;
+
+					case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+						mDown = true;
+						break;
+
+					case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+						mLeft = true;
+						break;
+
+					case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+						mRight = true;
+						break;
+
+					case SDL_CONTROLLER_BUTTON_A:
+						mLastTextKey = "return";
+						mSelect = true;
+						break;
+					case SDL_CONTROLLER_BUTTON_BACK:
+						mExit = true;
+						break;
+					default:
+						break;
+				}
+				break;
+
 			case SDL_JOYAXISMOTION:
 			case SDL_JOYBUTTONDOWN:
 			{
+				int jId;
+				if (event.type == SDL_JOYAXISMOTION)
+				{
+					jId = event.jaxis.which;
+				}
+				else
+				{
+					jId = event.jbutton.which;
+				}
+
+				JoyPad joyPad = JoystickPool::getSingleton().getJoystick(jId);
+				if (joyPad.pad != NULL) {
+					break;
+				}
+
 				JoystickAction joyAction(event.jbutton.which,
 					JoystickAction::NONE, event.jbutton.button);
 

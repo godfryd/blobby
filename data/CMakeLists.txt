@@ -28,6 +28,7 @@ set(install_files
 	config.xml
 	inputconfig.xml
 	server.xml
+	gamecontrollerdb.txt
 	lang_de.xml
 	lang_en.xml
 	lang_fr.xml

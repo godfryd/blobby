@@ -248,6 +248,7 @@ void TextManager::setDefault()
 	mStrings[OP_KEYBOARD] = "keyboard";
 	mStrings[OP_MOUSE] = "mouse";
 	mStrings[OP_JOYSTICK] = "joystick";
+	mStrings[OP_GAMEPAD] = "gamepad";
 	mStrings[OP_JUMP_BUTTON] = "jump button";
 	mStrings[OP_SET_ALL] = "set all";
 	mStrings[OP_LEFT_KEY] = "left key";

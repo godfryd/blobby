@@ -18,17 +18,17 @@ JoystickPool& JoystickPool::getSingleton()
 	return *mSingleton;
 }
 
-SDL_Joystick* JoystickPool::getJoystick(int id)
+JoyPad JoystickPool::getJoystick(int id)
 {
-	SDL_Joystick* joy =  mJoyMap[id];
+	JoyPad jp =  mJoyMap[id];
 
-	if (!joy)
+	if (!jp.joy && !jp.pad)
 	{
 		std::cerr << "Warning: could not find joystick number " << id << "!" << std::endl;
 		mJoyMap.erase(id);
 	}
 
-	return joy;
+	return jp;
 }
 
 void JoystickPool::probeJoysticks()
@@ -50,19 +50,36 @@ void JoystickPool::probeJoysticks()
 
 void JoystickPool::openJoystick(const int joyIndex)
 {
-	SDL_Joystick* joystickInstance = SDL_JoystickOpen(joyIndex);
-	if (joystickInstance != NULL)
+	JoyPad jp = {NULL, NULL};
+
+	if (SDL_IsGameController(joyIndex))
 	{
-		mJoyMap[SDL_JoystickInstanceID(joystickInstance)] = joystickInstance;
+		jp.pad = SDL_GameControllerOpen(joyIndex);
+		if (jp.pad != NULL)
+		{
+			mJoyMap[SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(jp.pad))] = jp;
+		}
+	}
+	else
+	{
+		jp.joy = SDL_JoystickOpen(joyIndex);
+		if (jp.joy != NULL)
+		{
+			mJoyMap[SDL_JoystickInstanceID(jp.joy)] = jp;
+		}
 	}
 }
 
 void JoystickPool::closeJoystick(const int joyId)
 {
-	SDL_Joystick* joystickInstance = mJoyMap[joyId];
-	if (joystickInstance != NULL)
+	JoyPad jp = mJoyMap[joyId];
+	if (jp.joy != NULL)
 	{
-		SDL_JoystickClose(joystickInstance);
+		SDL_JoystickClose(jp.joy);
+	}
+	if (jp.pad != NULL)
+	{
+		SDL_GameControllerClose(jp.pad);
 	}
 	mJoyMap.erase(joyId);
 }
@@ -72,8 +89,7 @@ void JoystickPool::closeJoysticks()
 	for (JoyMap::iterator iter = mJoyMap.begin();
 		iter != mJoyMap.end(); ++iter)
 	{
-		SDL_JoystickClose((*iter).second);
-		mJoyMap.erase((*iter).first);
+		closeJoystick((*iter).first);
 	}
 }
 
@@ -83,7 +99,7 @@ JoystickAction::JoystickAction(std::string string)
 {
 	type = AXIS;
 	number = 0;
-	joy = 0;
+	joyPad = {NULL, NULL};
 	joyid = 0;
 	try
 	{
@@ -99,8 +115,25 @@ JoystickAction::JoystickAction(std::string string)
 			if (sscanf(str, "joy_%d_axis_%d", &joyid, &number) < 2)
 				throw string;
 		}
+		else if (std::strstr(str, "gamepad"))
+		{
+			if (sscanf(str, "gamepad_%d", &joyid) < 1)
+				throw string;
+			if (std::strstr(str, "left"))
+			{
+				number = 0;
+			}
+			else if (std::strstr(str, "right"))
+			{
+				number = 1;
+			}
+			else
+			{
+				number = 2;
+			}
+		}
 
-		joy = JoystickPool::getSingleton().getJoystick(joyid);
+		joyPad = JoystickPool::getSingleton().getJoystick(joyid);
 	}
 	catch (const std::string& e)
 	{
@@ -111,7 +144,7 @@ JoystickAction::JoystickAction(std::string string)
 JoystickAction::JoystickAction(const JoystickAction& action)
 {
 	type = action.type;
-	joy = JoystickPool::getSingleton().getJoystick(action.joyid);
+	joyPad = JoystickPool::getSingleton().getJoystick(action.joyid);
 	joyid = action.joyid;
 	number = action.number;
 }
@@ -173,7 +206,7 @@ KeyAction JoystickAction::toKeyAction()
 			}
 		}
 	}
-	
+
 	if (type == BUTTON)
 	{
 		if(number == 0)
@@ -191,4 +224,3 @@ KeyAction JoystickAction::toKeyAction()
 	}
 	return KeyAction::NONE;
 }
-

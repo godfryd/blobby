@@ -539,6 +539,10 @@ void InputOptionsState::handlePlayerInput(PlayerSide player, std::string& lastAc
 		}
 		else if (device == "joystick")
 		{
+			device = "gamepad";
+		}
+		else if (device == "gamepad")
+		{
 			if (mRightDevice != "mouse" && mLeftDevice != "mouse")
 			{
 				device = "mouse";
@@ -718,7 +722,9 @@ TextManager::STRING InputOptionsState::getDeviceName(const std::string& device) 
 		return TextManager::OP_KEYBOARD;
 	else if (device[0] == 'm')
 		return TextManager::OP_MOUSE;
-	return TextManager::OP_JOYSTICK;
+	else if (device[0] == 'j')
+		return TextManager::OP_JOYSTICK;
+	return TextManager::OP_GAMEPAD;
 }
 
 #else
